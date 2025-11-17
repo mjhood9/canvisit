@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "84849211606",
+    "project_id": "canviste",
+    "storage_bucket": "canviste.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84849211606:android:62595de6cff2d5e99cf177",
+        "android_client_info": {
+          "package_name": "com.example.canvisit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbGxFMr0ad3ytZk2mItT9k1s4lUNfImsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
