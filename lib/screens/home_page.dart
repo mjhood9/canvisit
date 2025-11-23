@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
 import '../services/auth_service.dart';
-import '../widgets/zellige_background.dart';
+import '../widgets/custom_appbar.dart';
+import '../widgets/custom_bottom_navbar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -11,37 +11,30 @@ class HomePage extends StatelessWidget {
     final user = AuthService().currentUser;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bienvenue'),
-        backgroundColor: const Color(0xFF2E7D32),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => AuthService().signOut(),
+      appBar: const CustomAppBar(),
+      // ---------- Normal Background ----------
+      body: Center(
+        child: Card(
+          elevation: 6,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-        ],
-      ),
-      body: ZelligeBackground(
-        child: Center(
-          child: Card(
-            elevation: 6,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Salam, ${user?.email ?? 'utilisateur'}',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 10),
-                  const Text('Design: rouge & vert — motif zellige marocain'),
-                ],
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Bienvenue, ${user?.displayName ?? 'utilisateur'}',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+              ],
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: null, // ← no active icon
       ),
     );
   }

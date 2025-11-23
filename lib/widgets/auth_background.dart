@@ -9,7 +9,10 @@ class AuthBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xFF7A0C0F), // Your custom background color
+        image: DecorationImage(
+          image: AssetImage('assets/images/background.png'), // your image path
+          fit: BoxFit.cover, // makes image cover the entire screen
+        ),
       ),
       child: child,
     );

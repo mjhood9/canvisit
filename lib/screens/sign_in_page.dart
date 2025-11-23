@@ -19,7 +19,6 @@ class _SignInPageState extends State<SignInPage> {
   bool loading = false;
   bool showPassword = false;
 
-
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -47,99 +46,119 @@ class _SignInPageState extends State<SignInPage> {
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                // ----------- IMAGE ABOVE CARD -----------
-                Center(
-                  child: Image.asset(
-                    'assets/images/can_logo_full.png', // <-- replace with your image path
-                    height: 100,
-                  ),
-                ),
-
-                const SizedBox(height: 20),
                 // ---------- CARD ----------
                 Card(
                   elevation: 8,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Center(
-                            child: Text(
-                              'Bienvenue',
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // ---------- CARD HEADER WITH LOGO ----------
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF7A0C0F), // red
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(18),
                           ),
-
-                          const SizedBox(height: 20),
-
-                          TextFormField(
-                            controller: emailController,
-                            decoration: const InputDecoration(labelText: 'Email'),
-                            validator: (v) => !EmailValidator.validate(v ?? '')
-                                ? 'Email invalide'
-                                : null,
+                        ),
+                        padding: const EdgeInsets.all(20),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/images/can_logo_full.png',
+                            height: 80,
                           ),
-
-                          const SizedBox(height: 12),
-
-                          TextFormField(
-                            controller: passwordController,
-                            decoration: InputDecoration(
-                              labelText: 'Mot de passe',
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  showPassword ? Icons.visibility : Icons.visibility_off,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    showPassword = !showPassword;
-                                  });
-                                },
-                              ),
-                            ),
-                            obscureText: !showPassword,
-                            validator: (v) =>
-                            (v == null || v.length < 6) ? 'Au moins 6 caractères' : null,
-                          ),
-
-
-                          const SizedBox(height: 20),
-
-                          ElevatedButton(
-                            onPressed: loading ? null : _login,
-                            child: loading
-                                ? const SizedBox(
-                              height: 18,
-                              width: 18,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                                : const Text(
-                              'Se connecter',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+
+                      // ---------- CARD BODY ----------
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Center(
+                                child: Text(
+                                  'Bienvenue',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall!
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+
+                              const SizedBox(height: 20),
+
+                              TextFormField(
+                                controller: emailController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Email',
+                                ),
+                                validator: (v) =>
+                                !EmailValidator.validate(v ?? '')
+                                    ? 'Email invalide'
+                                    : null,
+                              ),
+
+                              const SizedBox(height: 12),
+
+                              TextFormField(
+                                controller: passwordController,
+                                decoration: InputDecoration(
+                                  labelText: 'Mot de passe',
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      showPassword
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        showPassword = !showPassword;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                obscureText: !showPassword,
+                                validator: (v) =>
+                                (v == null || v.length < 6)
+                                    ? 'Au moins 6 caractères'
+                                    : null,
+                              ),
+
+                              const SizedBox(height: 20),
+
+                              ElevatedButton(
+                                onPressed: loading ? null : _login,
+                                child: loading
+                                    ? const SizedBox(
+                                  height: 18,
+                                  width: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                                    : const Text(
+                                  'Se connecter',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
                 const SizedBox(height: 20),
 
-                // ---------- SIGN UP BUTTON OUTSIDE CARD ----------
+                // ---------- SIGN UP OUTSIDE CARD ----------
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton(
@@ -148,8 +167,8 @@ class _SignInPageState extends State<SignInPage> {
                       MaterialPageRoute(builder: (_) => const SignUpPage()),
                     ),
                     style: OutlinedButton.styleFrom(
-                      backgroundColor: const Color(0xFF7A0C0F), // same as background
-                      foregroundColor: Colors.white, // text color
+                      backgroundColor: const Color(0xFF7A0C0F),
+                      foregroundColor: Colors.white,
                       side: const BorderSide(color: Colors.white, width: 1.5),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -158,14 +177,15 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     child: const Text(
                       "Pas de compte ? S'inscrire",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 12),
+
+                // ---------- GOOGLE BUTTON ----------
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
@@ -187,10 +207,8 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     label: const Text(
                       'Se connecter avec Google',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Colors.white,
@@ -203,7 +221,6 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
