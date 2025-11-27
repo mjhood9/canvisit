@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../widgets/custom_appbar.dart';
-import '../widgets/custom_bottom_navbar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -32,9 +31,6 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: null, // ← no active icon
       ),
     );
   }

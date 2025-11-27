@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../screens/auth_gate.dart';
 import '../screens/home_page.dart';
-import '../services/auth_service.dart';
+import '../screens/chatbot_page.dart';
+import '../screens/notification_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
@@ -14,14 +14,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: const Color(0xFF7A0C0F),
       elevation: 0,
       automaticallyImplyLeading: false,
-      centerTitle: true, // centers the title
+      centerTitle: true,
       title: GestureDetector(
-        onTap: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const HomePage()),
-          );
-        },
         child: Image.asset(
           'assets/images/canvisit.png',
           height: 40,
@@ -29,23 +23,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           fit: BoxFit.contain,
         ),
       ),
+      leading: IconButton(
+        icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ChatBotPage()),
+          );
+        },
+        tooltip: 'Chatbot',
+      ),
       actions: [
         IconButton(
-          icon: const Icon(
-            Icons.logout,
-            color: Colors.white, // make icon white
-          ),
-          onPressed: () async {
-            await AuthService().signOut();
-            // Navigate back to AuthGate and clear the stack
-            if (context.mounted) {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => const AuthGate()),
-                    (route) => false,
-              );
-            }
+          icon: const Icon(Icons.notifications_none, color: Colors.white),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const NotificationPage()),
+            );
           },
-          tooltip: 'Se déconnecter',
+          tooltip: 'Notifications',
         ),
       ],
     );

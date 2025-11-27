@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import '../screens/auth_gate.dart';
 import '../widgets/custom_appbar.dart';
-import '../widgets/custom_bottom_navbar.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -30,7 +30,6 @@ class ProfilePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
 
-                // ---------- PROFILE IMAGE ----------
                 CircleAvatar(
                   radius: 50,
                   backgroundImage: photoURL != null
@@ -40,7 +39,6 @@ class ProfilePage extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // ---------- NAME ----------
                 Text(
                   displayName,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -50,17 +48,42 @@ class ProfilePage extends StatelessWidget {
 
                 const SizedBox(height: 8),
 
-                // ---------- EMAIL ----------
                 Text(
                   email,
                   style: Theme.of(context).textTheme.bodyMedium,
+                ),
+
+                const SizedBox(height: 24),
+
+                // ---------- LOGOUT BUTTON ----------
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFC62828),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 28, vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  icon: const Icon(Icons.logout),
+                  label: const Text("Se déconnecter"),
+                  onPressed: () async {
+                    await AuthService().signOut();
+
+                    if (context.mounted) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (_) => const AuthGate()),
+                            (route) => false,
+                      );
+                    }
+                  },
                 ),
               ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavBar(currentIndex: 3),
     );
   }
 }

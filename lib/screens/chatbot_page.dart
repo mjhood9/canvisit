@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_appbar.dart';
 
-class ExplorePage extends StatelessWidget {
-  const ExplorePage({super.key});
+class ChatBotPage extends StatelessWidget {
+  const ChatBotPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
       body: const Center(
-        child: Text('Explore Page Content'),
+        child: Text('ChatBot Page Content'),
       ),
     );
   }
