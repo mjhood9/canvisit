@@ -71,6 +71,12 @@ flutter:
   assets:
     - assets/images/
     - assets/images/cities/
+    - assets/images/casablanca/
+    - assets/images/rabat/
+    - assets/images/tangier/
+    - assets/images/fes/
+    - assets/images/marrakech/
+    - assets/images/agadir/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

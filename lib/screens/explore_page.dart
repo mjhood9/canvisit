@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/custom_appbar.dart';
 
+// IMPORT ALL CITY PAGES
+import '../screens/casablanca_page.dart';
+import '../screens/rabat_page.dart';
+import '../screens/tangier_page.dart';
+import '../screens/marrakech_page.dart';
+import '../screens/agadir_page.dart';
+import '../screens/fes_page.dart';
+
 class ExplorePage extends StatelessWidget {
   const ExplorePage({super.key});
 
@@ -25,18 +33,28 @@ class ExplorePage extends StatelessWidget {
       "assets/images/cities/fes.png",
     ];
 
+    /// MAP EACH CITY TO ITS PAGE
+    final List<Widget> cityPages = [
+      const CasablancaPage(),
+      const RabatPage(),
+      const TangierPage(),
+      const MarrakechPage(),
+      const AgadirPage(),
+      const FesPage(),
+    ];
+
     return Scaffold(
       appBar: const CustomAppBar(),
       body: Column(
         children: [
           const SizedBox(height: 16),
 
-          // ----------- TITLE -----------
+          /// ---- TITLE ----
           Text(
             "SOUHAITEZ EN PLUS SUR NOTRE HÔTE ?",
             textAlign: TextAlign.center,
             style: GoogleFonts.gothicA1(
-              color:const Color(0xFF_7A_0C_0F),
+              color: Color(0xFF7A0C0F),
               fontSize: 20,
               fontWeight: FontWeight.w900,
               letterSpacing: 1,
@@ -45,52 +63,61 @@ class ExplorePage extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          // ----------- GRID OF CARDS -----------
+          /// ---- GRID OF CARDS ----
           Expanded(
             child: GridView.builder(
               padding: const EdgeInsets.all(16),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,        // 2 cards per row
+                crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
                 childAspectRatio: 0.8,
               ),
               itemCount: cities.length,
               itemBuilder: (context, index) {
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  elevation: 4,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // -------- IMAGE (Fixed size, not zooming) --------
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(16),
-                        ),
-                        child: SizedBox(
-                          width: double.infinity, // ensures full width
-                          child: Image.asset(
-                            images[index],
-                            height: 120,
-                            fit: BoxFit.cover, // clean, not stretched
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => cityPages[index]),
+                    );
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        /// IMAGE
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(16),
+                          ),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Image.asset(
+                              images[index],
+                              height: 120,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 40),
 
-                      // -------- CITY NAME --------
-                      Text(
-                        cities[index].toUpperCase(),
-                        style: GoogleFonts.gothicA1(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w900, // extra bold
+                        const SizedBox(height: 40),
+
+                        /// CITY NAME
+                        Text(
+                          cities[index].toUpperCase(),
+                          style: GoogleFonts.gothicA1(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
