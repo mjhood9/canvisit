@@ -37,9 +37,7 @@ class _RabatPageState extends State<RabatPage> {
 
           /// -------- TAB CONTENT --------
           Expanded(
-            child: Center(
-              child: _buildTabContent(),
-            ),
+            child: _buildTabContent(), // removed Center widget
           ),
         ],
       ),
@@ -184,11 +182,435 @@ class _RabatPageState extends State<RabatPage> {
             ],
           ),
         );
-
       case 1:
-        return const Text(
-          "Stades à Rabat",
-          style: TextStyle(fontSize: 18),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              // ---------- 1. Complexe Sportif Prince Moulay Abdellah ----------
+              Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.white, width: 1),
+                  ),
+                ),
+                child: ExpansionTile(
+                  tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  backgroundColor: const Color(0xFF7A0C0F),                     // content background
+                  collapsedBackgroundColor: const Color(0xFF7A0C0F), // header background
+                  iconColor: Colors.white,                           // arrow expanded
+                  collapsedIconColor: Colors.white,                 // arrow collapsed
+                  title: const Text(
+                    "Complexe Sportif Prince Moulay Abdellah",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 18,
+                      color: Colors.white,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            "assets/images/rabat/stade_abdellah.jpg",
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            "Le Complexe Sportif Prince Moulay Abdellah est le plus grand stade de Rabat. "
+                                "Il accueille régulièrement des matches internationaux, la Coupe du Trône, "
+                                "ainsi que de nombreux événements sportifs et culturels. Le stade est en "
+                                "phase de modernisation majeure dans le cadre de la préparation de la CAN "
+                                "et de la Coupe du Monde 2030.",
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(fontSize: 16, height: 1.5),
+                          ),
+                          const SizedBox(height: 12),
+                          Table(
+                            border: TableBorder.all(color: Colors.black26),
+                            columnWidths: const {0: FlexColumnWidth(1), 1: FlexColumnWidth(2)},
+                            children: const [
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Nom", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Complexe Sportif Prince Moulay Abdellah"),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Ville", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Rabat"),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Catégorie", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Stade principal"),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Capacité", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("69,500"),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // ---------- 2. Stade Al Barid ----------
+              Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.white, width: 1),
+                  ),
+                ),
+                child: ExpansionTile(
+                  tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  backgroundColor: const Color(0xFF7A0C0F),
+                  collapsedBackgroundColor: const Color(0xFF7A0C0F),
+                  iconColor: Colors.white,
+                  collapsedIconColor: Colors.white,
+                  title: const Text(
+                    "Stade Al Barid",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 18,
+                      color: Colors.white,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            "assets/images/rabat/stade_barid.jpg",
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            "Le Stade Al Barid est un stade historique de Rabat, principalement utilisé "
+                                "pour les entraînements et les compétitions locales. Bien qu'il soit de "
+                                "taille modeste, il occupe une place importante dans le sport régional.",
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(fontSize: 16, height: 1.5),
+                          ),
+                          const SizedBox(height: 12),
+                          Table(
+                            border: TableBorder.all(color: Colors.black26),
+                            columnWidths: const {0: FlexColumnWidth(1), 1: FlexColumnWidth(2)},
+                            children: const [
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Nom", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Stade Al Barid"),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Ville", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Rabat"),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Catégorie", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Stade secondaire"),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Capacité", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("18,000"),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // ---------- 3. Stade Olympique Annexe ----------
+              Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.white, width: 1),
+                  ),
+                ),
+                child: ExpansionTile(
+                  tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  backgroundColor: const Color(0xFF7A0C0F),
+                  collapsedBackgroundColor: const Color(0xFF7A0C0F),
+                  iconColor: Colors.white,
+                  collapsedIconColor: Colors.white,
+                  title: const Text(
+                    "Stade Olympique Annexe Complexe Sportif Prince Moulay Abdellah",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 18,
+                      color: Colors.white,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            "assets/images/rabat/stade_olympique.jpg",
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            "Situé à côté du Complexe Prince Moulay Abdellah, ce stade annexe est utilisé "
+                                "pour les entraînements professionnels, les préparations d’avant-match et "
+                                "les compétitions d’athlétisme. Il dispose d’une piste rénovée et d’un "
+                                "terrain synthétique de qualité.",
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(fontSize: 16, height: 1.5),
+                          ),
+                          const SizedBox(height: 12),
+                          Table(
+                            border: TableBorder.all(color: Colors.black26),
+                            columnWidths: const {0: FlexColumnWidth(1), 1: FlexColumnWidth(2)},
+                            children: const [
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Nom", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Stade Olympique Annexe"),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Ville", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Rabat"),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Catégorie", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Stade Annexe"),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Capacité", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("21,000"),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // ---------- 4. Complexe Sportif Prince Héritier Moulay El Hassan ----------
+              Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.white, width: 1),
+                  ),
+                ),
+                child: ExpansionTile(
+                  tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  backgroundColor: const Color(0xFF7A0C0F),
+                  collapsedBackgroundColor: const Color(0xFF7A0C0F),
+                  iconColor: Colors.white,
+                  collapsedIconColor: Colors.white,
+                  title: const Text(
+                    "Complexe Sportif Prince Héritier Moulay El Hassan",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 18,
+                      color: Colors.white,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            "assets/images/rabat/stade_hassan.jpg",
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            "Le Complexe Sportif Prince Héritier Moulay El Hassan est le stade officiel "
+                                "du FUS Rabat. Il est apprécié pour son ambiance, ses installations "
+                                "modernisées et son rôle majeur dans la formation des jeunes joueurs.",
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(fontSize: 16, height: 1.5),
+                          ),
+                          const SizedBox(height: 12),
+                          Table(
+                            border: TableBorder.all(color: Colors.black26),
+                            columnWidths: const {0: FlexColumnWidth(1), 1: FlexColumnWidth(2)},
+                            children: const [
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Nom", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Complexe Sportif Prince Héritier Moulay El Hassan"),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Ville", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Rabat"),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Catégorie", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Stade du club FUS Rabat"),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Capacité", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("22,000"),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
 
       case 2:

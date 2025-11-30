@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/attraction_card.dart';
 import '../widgets/custom_back_appbar.dart';
 
 class CasablancaPage extends StatefulWidget {
@@ -37,9 +38,7 @@ class _CasablancaPageState extends State<CasablancaPage> {
 
           /// -------- TAB CONTENT --------
           Expanded(
-            child: Center(
-              child: _buildTabContent(),
-            ),
+            child: _buildTabContent(), // removed Center widget
           ),
         ],
       ),
@@ -187,15 +186,199 @@ class _CasablancaPageState extends State<CasablancaPage> {
           ),
         );
       case 1:
-        return const Text(
-          "Stades à Casablanca",
-          style: TextStyle(fontSize: 18),
-        );
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // ---------- IMAGE ----------
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(
+                  'assets/images/casablanca/stade.jpg',
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+              ),
 
+              const SizedBox(height: 16),
+
+              // ---------- TEXT ----------
+              const Text(
+                "Le Complexe Sportif Mohammed V est le stade principal de Casablanca. "
+                    "Inauguré en 1955 et rénové à plusieurs reprises, il accueille les "
+                    "grands matchs du Wydad AC et du Raja CA ainsi que de nombreux événements sportifs.",
+                style: TextStyle(fontSize: 16, height: 1.5),
+                textAlign: TextAlign.justify,
+              ),
+
+              const SizedBox(height: 24),
+
+              // ---------- TABLE ----------
+              Table(
+                border: TableBorder.all(color: Colors.black26),
+                columnWidths: const {
+                  0: FlexColumnWidth(1),
+                  1: FlexColumnWidth(2),
+                },
+                children: const [
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Nom", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Complexe Sportif Mohammed V"),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Ville", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Casablanca"),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Capacité", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("≈ 45 000 places"),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Inauguration", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("1955"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
       case 2:
-        return const Text(
-          "Activités à Casablanca",
-          style: TextStyle(fontSize: 18),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ---------------- TOP ATTRACTIONS ----------------
+              const Text(
+                "Top Attractions",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 220,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: const [
+                    AttractionCard(
+                      name: "Mosquée Hassan II",
+                      imagePath: "assets/images/casablanca/hassan2.jpg",
+                      details:
+                      "La Mosquée Hassan II est l'un des monuments les plus emblématiques du Maroc, célèbre pour son architecture impressionnante et son emplacement au bord de l’océan.",
+                    ),
+                    SizedBox(width: 12),
+                    AttractionCard(
+                      name: "Corniche Ain Diab",
+                      imagePath: "assets/images/casa/corniche.jpg",
+                      details:
+                      "La Corniche de Casablanca est un lieu populaire pour se promener, se détendre, profiter de la vue sur la mer et découvrir cafés et restaurants.",
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              // ---------------- RESTAURANTS ----------------
+              const Text(
+                "Restaurants",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 220,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: const [
+                    AttractionCard(
+                      name: "Le Cabestan",
+                      imagePath: "assets/images/casa/cabestan.jpg",
+                      details:
+                      "Restaurant emblématique face à l'océan, réputé pour ses plats raffinés et son ambiance élégante.",
+                    ),
+                    SizedBox(width: 12),
+                    AttractionCard(
+                      name: "Rick’s Café",
+                      imagePath: "assets/images/casa/ricks.jpg",
+                      details:
+                      "Inspiré du film Casablanca, ce café célèbre offre une ambiance unique et un menu international.",
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              // ---------------- ACTIVITIES ----------------
+              const Text(
+                "Activities",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 220,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: const [
+                    AttractionCard(
+                      name: "Shopping Morocco Mall",
+                      imagePath: "assets/images/casa/morocco_mall.jpg",
+                      details:
+                      "Le plus grand centre commercial d’Afrique, avec des boutiques, restaurants et attractions.",
+                    ),
+                    SizedBox(width: 12),
+                    AttractionCard(
+                      name: "Visite Sky 28",
+                      imagePath: "assets/images/casa/sky28.jpg",
+                      details:
+                      "Un bar panoramique situé au 28e étage offrant une vue spectaculaire sur tout Casablanca.",
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
 
       default:

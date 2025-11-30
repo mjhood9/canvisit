@@ -37,9 +37,7 @@ class _AgadirPageState extends State<AgadirPage> {
 
           /// -------- TAB CONTENT --------
           Expanded(
-            child: Center(
-              child: _buildTabContent(),
-            ),
+            child: _buildTabContent(), // removed Center widget
           ),
         ],
       ),
@@ -184,10 +182,98 @@ class _AgadirPageState extends State<AgadirPage> {
         );
 
       case 1:
-        return const Text(
-          "Stades à Agadir",
-          style: TextStyle(fontSize: 18),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // ---------- IMAGE ----------
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(
+                  'assets/images/agadir/stade.jpg',
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // ---------- TEXT ----------
+              const Text(
+                "Le Grand Stade d’Agadir, également appelé Stade Adrar, est l’un des "
+                    "plus grands et plus modernes stades du Maroc. Inauguré en 2013, il "
+                    "a accueilli plusieurs événements internationaux dont la Coupe du Monde "
+                    "des Clubs FIFA. Sa conception moderne et son architecture inspirée de "
+                    "la région du Souss en font un édifice emblématique.",
+                style: TextStyle(fontSize: 16, height: 1.5),
+                textAlign: TextAlign.justify,
+              ),
+
+              const SizedBox(height: 24),
+
+              // ---------- TABLE ----------
+              Table(
+                border: TableBorder.all(color: Colors.black26),
+                columnWidths: const {
+                  0: FlexColumnWidth(1),
+                  1: FlexColumnWidth(2),
+                },
+                children: const [
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Nom", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Grand Stade d’Agadir (Stade Adrar)"),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Ville", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Agadir"),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Capacité", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("≈ 45 480 places"),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Inauguration", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("2013"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         );
+
 
       case 2:
         return const Text(

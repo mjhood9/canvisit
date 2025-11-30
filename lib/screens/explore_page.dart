@@ -18,7 +18,7 @@ class ExplorePage extends StatelessWidget {
     final List<String> cities = [
       "Casablanca",
       "Rabat",
-      "Tangier",
+      "Tanger",
       "Marrakech",
       "Agadir",
       "Fes"

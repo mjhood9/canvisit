@@ -37,9 +37,7 @@ class _MarrakechPageState extends State<MarrakechPage> {
 
           /// -------- TAB CONTENT --------
           Expanded(
-            child: Center(
-              child: _buildTabContent(),
-            ),
+            child: _buildTabContent(), // removed Center widget
           ),
         ],
       ),
@@ -185,10 +183,99 @@ class _MarrakechPageState extends State<MarrakechPage> {
         );
 
       case 1:
-        return const Text(
-          "Stades à Marrakech",
-          style: TextStyle(fontSize: 18),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // ---------- IMAGE ----------
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(
+                  'assets/images/marrakech/stade.jpg',
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // ---------- DESCRIPTION ----------
+              const Text(
+                "Le Grand Stade de Marrakech, inauguré en 2011, est l’un des plus "
+                    "imposants stades du Maroc. Situé à environ 11 km du centre-ville, "
+                    "il se distingue par son architecture moderne inspirée du style "
+                    "traditionnel marocain. Le stade a accueilli de nombreux événements "
+                    "nationaux et internationaux, dont des matchs de la Coupe du Monde "
+                    "des Clubs FIFA.",
+                style: TextStyle(fontSize: 16, height: 1.5),
+                textAlign: TextAlign.justify,
+              ),
+
+              const SizedBox(height: 24),
+
+              // ---------- TABLE ----------
+              Table(
+                border: TableBorder.all(color: Colors.black26),
+                columnWidths: const {
+                  0: FlexColumnWidth(1),
+                  1: FlexColumnWidth(2),
+                },
+                children: const [
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Nom", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Grand Stade de Marrakech"),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Ville", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Marrakech"),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Capacité", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("≈ 45 000 places"),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Inauguration", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("2011"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         );
+
 
       case 2:
         return const Text(
