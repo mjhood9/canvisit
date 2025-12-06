@@ -3,6 +3,8 @@
 <plist version="1.0">
 <dict>
     <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Nous avons besoin de votre position pour trouver des hôtels à proximité</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
     <string>We need your location to show it on the map</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>We need your location to show it on the map</string>

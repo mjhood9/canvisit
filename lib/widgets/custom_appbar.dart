@@ -4,8 +4,13 @@ import '../screens/notification_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
+  final TabController? tabController;
 
-  const CustomAppBar({super.key, this.height = kToolbarHeight});
+  const CustomAppBar({
+    super.key,
+    this.height = kToolbarHeight,
+    this.tabController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       automaticallyImplyLeading: false,
       centerTitle: true,
+
       title: GestureDetector(
         child: Image.asset(
           'assets/images/canvisit.png',
@@ -22,6 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           fit: BoxFit.contain,
         ),
       ),
+
       leading: IconButton(
         icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
         onPressed: () {
@@ -32,6 +39,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         },
         tooltip: 'Chatbot',
       ),
+
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_none, color: Colors.white),
@@ -44,9 +52,35 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           tooltip: 'Notifications',
         ),
       ],
+
+      // ✔ Added TabBar with selected/unselected colors + white top border
+      bottom: tabController != null
+          ? PreferredSize(
+        preferredSize: const Size.fromHeight(48),
+        child: Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: Colors.white, width: 1), // WHITE TOP BORDER
+            ),
+          ),
+          child: TabBar(
+            controller: tabController,
+            indicatorColor: Colors.white,
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white70,
+            tabs: const [
+              Tab(icon: Icon(Icons.map), text: 'Carte'),
+              Tab(icon: Icon(Icons.list), text: 'Liste'),
+            ],
+          ),
+        ),
+      )
+          : null,
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(height);
+  Size get preferredSize => Size.fromHeight(
+    tabController != null ? height + 75 : height,
+  );
 }
