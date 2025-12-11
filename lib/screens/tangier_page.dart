@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_back_appbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../widgets/attraction_card.dart';
+
 
 class TangierPage extends StatefulWidget {
   const TangierPage({super.key});
@@ -9,7 +12,7 @@ class TangierPage extends StatefulWidget {
 }
 
 class _TangierPageState extends State<TangierPage> {
-  int selectedTab = 0; // 0 = Info (default), 1 = Stade, 2 = Activité
+  int selectedTab = 0; // 0 = Info, 1 = Stade, 2 = Activité
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +21,6 @@ class _TangierPageState extends State<TangierPage> {
       body: Column(
         children: [
           const SizedBox(height: 20),
-
-          /// ------- BUTTON ROW -------
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
@@ -32,27 +33,20 @@ class _TangierPageState extends State<TangierPage> {
               ],
             ),
           ),
-
           const SizedBox(height: 30),
-
-          /// -------- TAB CONTENT --------
           Expanded(
-            child: _buildTabContent(), // removed Center widget
+            child: _buildTabContent(),
           ),
         ],
       ),
     );
   }
 
-  /// ---------------- TAB BUTTON BUILDER ----------------
   Widget _buildTabButton(String text, int index) {
     final bool isActive = selectedTab == index;
-
     return Expanded(
       child: GestureDetector(
-        onTap: () {
-          setState(() => selectedTab = index);
-        },
+        onTap: () => setState(() => selectedTab = index),
         child: Container(
           height: 45,
           decoration: BoxDecoration(
@@ -76,217 +70,271 @@ class _TangierPageState extends State<TangierPage> {
     );
   }
 
-  /// ---------------- TAB CONTENT AREA ----------------
   Widget _buildTabContent() {
     switch (selectedTab) {
       case 0:
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // ---------- IMAGE ----------
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  'assets/images/tangier/info.jpg',
-                  height: 200,
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // ---------- TEXT ----------
-              const Text(
-                "Tangier est une ville portuaire située au nord du Maroc, à l'entrée du détroit de Gibraltar. "
-                    "Elle a une longue histoire en tant que carrefour culturel, reliant l'Afrique, l'Europe et le Moyen-Orient. "
-                    "Tangier est célèbre pour ses plages, sa médina pittoresque, ses marchés animés, et son atmosphère cosmopolite unique.",
-                style: TextStyle(fontSize: 16, height: 1.5),
-                textAlign: TextAlign.justify,
-              ),
-
-              const SizedBox(height: 24),
-
-              // ---------- TABLE ----------
-              Table(
-                border: TableBorder.all(color: Colors.black26),
-                columnWidths: const {
-                  0: FlexColumnWidth(1),
-                  1: FlexColumnWidth(2),
-                },
-                children: const [
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Pays", style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Maroc"),
-                      ),
-                    ],
-                  ),
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Population", style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("≈ 1,050,000"),
-                      ),
-                    ],
-                  ),
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Superficie", style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("≈ 119 km²"),
-                      ),
-                    ],
-                  ),
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Langue", style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Arabe, Français"),
-                      ),
-                    ],
-                  ),
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Fuseau horaire", style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("GMT+1"),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-
+        return _buildInfoTab();
       case 1:
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // ---------- IMAGE ----------
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  'assets/images/tangier/stade.jpg',
-                  height: 200,
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // ---------- DESCRIPTION ----------
-              const Text(
-                "Le Grand Stade de Tanger, également appelé Stade Ibn Battouta, est "
-                    "l’un des stades les plus modernes du Maroc. Construit en 2011, il a "
-                    "bénéficié d’importantes rénovations récentes en 2023–2025 afin de "
-                    "répondre aux standards internationaux pour les grandes compétitions "
-                    "comme la Coupe du Monde des Clubs de la FIFA et la CAN.\n\n"
-
-                    "Aujourd'hui, le stade est considéré comme l’un des plus beaux "
-                    "complexes sportifs d’Afrique du Nord.",
-                style: TextStyle(fontSize: 16, height: 1.5),
-                textAlign: TextAlign.justify,
-              ),
-
-              const SizedBox(height: 24),
-
-              // ---------- TABLE ----------
-              Table(
-                border: TableBorder.all(color: Colors.black26),
-                columnWidths: const {
-                  0: FlexColumnWidth(1),
-                  1: FlexColumnWidth(2),
-                },
-                children: const [
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Nom", style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Grand Stade de Tanger (Stade Ibn Battouta)"),
-                      ),
-                    ],
-                  ),
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Ville", style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Tanger"),
-                      ),
-                    ],
-                  ),
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Capacité", style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("≈ 75 600 places"),
-                      ),
-                    ],
-                  ),
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Inauguration", style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("2011"),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-
-
+        return _buildStadeTab();
       case 2:
-        return const Text(
-          "Activités à Tangier",
-          style: TextStyle(fontSize: 18),
-        );
-
+        return _buildFirestoreTab();
       default:
         return const SizedBox();
     }
+  }
+
+  Widget _buildInfoTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.asset(
+              'assets/images/tangier/info.jpg',
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            "Tangier est une ville portuaire située au nord du Maroc, à l'entrée du détroit de Gibraltar. "
+                "Elle a une longue histoire en tant que carrefour culturel, reliant l'Afrique, l'Europe et le Moyen-Orient. "
+                "Tangier est célèbre pour ses plages, sa médina pittoresque, ses marchés animés, et son atmosphère cosmopolite unique.",
+            style: TextStyle(fontSize: 16, height: 1.5),
+            textAlign: TextAlign.justify,
+          ),
+          const SizedBox(height: 24),
+          Table(
+            border: TableBorder.all(color: Colors.black26),
+            columnWidths: const {
+              0: FlexColumnWidth(1),
+              1: FlexColumnWidth(2),
+            },
+            children: const [
+              TableRow(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Pays", style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Maroc"),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Population", style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("≈ 1,050,000"),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Superficie", style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("≈ 119 km²"),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Langue", style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Arabe, Français"),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Fuseau horaire", style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("GMT+1"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStadeTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.asset(
+              'assets/images/tangier/stade.jpg',
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            "Le Grand Stade de Tanger, également appelé Stade Ibn Battouta, est "
+                "l’un des stades les plus modernes du Maroc. Construit en 2011, il a "
+                "bénéficié d’importantes rénovations récentes en 2023–2025 afin de "
+                "répondre aux standards internationaux pour les grandes compétitions "
+                "comme la Coupe du Monde des Clubs de la FIFA et la CAN.\n\n"
+
+                "Aujourd'hui, le stade est considéré comme l’un des plus beaux "
+                "complexes sportifs d’Afrique du Nord.",
+            style: TextStyle(fontSize: 16, height: 1.5),
+            textAlign: TextAlign.justify,
+          ),
+
+          const SizedBox(height: 24),
+
+          // ---------- TABLE ----------
+          Table(
+            border: TableBorder.all(color: Colors.black26),
+            columnWidths: const {
+              0: FlexColumnWidth(1),
+              1: FlexColumnWidth(2),
+            },
+            children: const [
+              TableRow(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Nom", style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Grand Stade de Tanger (Stade Ibn Battouta)"),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Ville", style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Tanger"),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Capacité", style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("≈ 75 600 places"),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Inauguration", style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("2011"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFirestoreTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildFirestoreSection("Top Attractions", "attraction"),
+          const SizedBox(height: 25),
+          _buildFirestoreSection("Restaurants", "restaurant"),
+          const SizedBox(height: 25),
+          _buildFirestoreSection("Activities", "activity"),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFirestoreSection(String title, String category) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 220,
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('tangier_attractions')
+                .where('category', isEqualTo: category)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(child: Text('Erreur: ${snapshot.error}'));
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              final data = snapshot.data!.docs;
+
+              if (data.isEmpty) {
+                return const Center(child: Text('Aucun élément trouvé'));
+              }
+
+              return ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: data.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  final item = data[index].data()! as Map<String, dynamic>;
+                  return AttractionCard(
+                    name: item['name'] ?? '',
+                    imagePath: item['imagePath'] ?? '',
+                    details: item['details'] ?? '',
+                    googleMapsUrl: item['googleMapsUrl'] ?? '',
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
   }
 }

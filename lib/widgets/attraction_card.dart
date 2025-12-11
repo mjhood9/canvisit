@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 class AttractionCard extends StatelessWidget {
   final String name;
   final String imagePath;
   final String details;
+  final String googleMapsUrl; // NEW
 
   const AttractionCard({
     super.key,
     required this.name,
     required this.imagePath,
     required this.details,
+    required this.googleMapsUrl, // NEW
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 200, // fixed width
+      width: 200,
       child: GestureDetector(
         onTap: () {
           showDialog(
@@ -50,6 +54,20 @@ class AttractionCard extends StatelessWidget {
                           details,
                           style: const TextStyle(fontSize: 16, height: 1.5),
                           textAlign: TextAlign.justify,
+                        ),
+                        const SizedBox(height: 12),
+                        ElevatedButton.icon(
+                          onPressed: () async {
+                            if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+                              await launchUrl(Uri.parse(googleMapsUrl));
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                          ),
+                          icon: const Icon(Icons.location_on),
+                          label: const Text("Voir sur Google Maps",
+                            style: TextStyle(color: Colors.white)),
                         ),
                       ],
                     ),
