@@ -4,6 +4,7 @@
 // import 'package:canvisit/seeders/rabat_seeder.dart';
 // import 'package:canvisit/seeders/tangier_seeder.dart';
 // import './seeders/casablanca_seeder.dart';
+import 'package:canvisit/seeders/groupchat_seeder.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,6 +18,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // await seedCan2025GroupChats();
   // await seedCasablancaAttractions();
   // await seedRabatAttractions();
   // await seedTangierAttractions();
@@ -46,6 +48,18 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFB71C1C),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.symmetric(
+              vertical: 14,
+              horizontal: 24,
+            ),
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),

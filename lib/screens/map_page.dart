@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:flutter_map/flutter_map.dart'; // Contient MapOptions et FitBoundsOptions
+import 'package:latlong2/latlong.dart'; // Contient LatLngBounds
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
-import 'package:url_launcher/url_launcher.dart'; // Import for destination button
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:math';
 import '../widgets/custom_appbar.dart';
 
 // --- Data Structure for Marker Information ---
@@ -11,15 +13,15 @@ class MarkerData {
   final LatLng point;
   final String name;
   final String city;
-  final String description; // Added description
-  final String imageUrl;    // Added image URL/Asset path
+  final String description;
+  final String imageUrl;
 
   MarkerData({
     required this.point,
     required this.name,
     required this.city,
     this.description = 'No detailed description available.',
-    this.imageUrl = 'assets/images/placeholder.png', // Default placeholder
+    this.imageUrl = 'assets/images/placeholder.png',
   });
 }
 
@@ -27,8 +29,8 @@ class MarkerData {
 // ========================== Marker Data Lists =======================
 // ====================================================================
 
-// Define the Stadium Marker Data (Extended with Description/Image)
 final List<MarkerData> stadiumData = [
+  // ... (Liste stadiumData inchangée) ...
   MarkerData(
     point: LatLng(33.9599, -6.8891),
     name: 'Complexe Moulay Abdellah',
@@ -58,28 +60,27 @@ final List<MarkerData> stadiumData = [
         "grands matchs du Wydad AC et du Raja CA ainsi que de nombreux événements sportifs.",
     imageUrl: 'assets/images/casablanca/stade.jpg',
   ),
-  // NOTE: You should add description/image details for all other stadiums here.
   MarkerData(
-      point: LatLng(33.9573, -6.8913),
-      name: 'Stade Olympique (annexe)',
-      city: 'Rabat',
+    point: LatLng(33.9573, -6.8913),
+    name: 'Stade Olympique (annexe)',
+    city: 'Rabat',
     description: "Situé à côté du Complexe Prince Moulay Abdellah, ce stade annexe est utilisé "
         "pour les entraînements professionnels, les préparations d’avant-match et "
         "les compétitions d’athlétisme. Il dispose d’une piste rénovée et d’un "
         "terrain synthétique de qualité.",
     imageUrl: 'assets/images/rabat/stade_olympique.jpg',),
   MarkerData(
-      point: LatLng(33.9758, -6.8238),
-      name: 'Complexe Sportif Prince Héritier Moulay EL Hassan',
-      city: 'Rabat',
+    point: LatLng(33.9758, -6.8238),
+    name: 'Complexe Sportif Prince Héritier Moulay EL Hassan',
+    city: 'Rabat',
     description: "Le Complexe Sportif Prince Héritier Moulay El Hassan est le stade officiel "
         "du FUS Rabat. Il est apprécié pour son ambiance, ses installations "
         "modernisées et son rôle majeur dans la formation des jeunes joueurs.",
     imageUrl: 'assets/images/rabat/stade_hassan.jpg',
   ),
   MarkerData(
-      point: LatLng(31.7067, -7.9806),
-      name: 'Grand Stade Marrakech', city: 'Marrakech',
+    point: LatLng(31.7067, -7.9806),
+    name: 'Grand Stade Marrakech', city: 'Marrakech',
     description: "Le Grand Stade de Marrakech, inauguré en 2011, est l’un des plus "
         "imposants stades du Maroc. Situé à environ 11 km du centre-ville, "
         "il se distingue par son architecture moderne inspirée du style "
@@ -88,8 +89,8 @@ final List<MarkerData> stadiumData = [
         "des Clubs FIFA.",
     imageUrl: 'assets/images/marrakech/stade.jpg',),
   MarkerData(
-      point: LatLng(34.0028, -4.9689),
-      name: 'Complexe Sportif de Fès', city: 'Fès',
+    point: LatLng(34.0028, -4.9689),
+    name: 'Complexe Sportif de Fès', city: 'Fès',
     description: "Le Complexe Sportif de Fès est l’une des plus grandes installations "
         "sportives de la région. Construit pour répondre aux normes "
         "internationales, il accueille principalement les matchs du MAS Fès "
@@ -97,8 +98,8 @@ final List<MarkerData> stadiumData = [
         "pour divers événements sportifs et culturels tout au long de l'année.",
     imageUrl: 'assets/images/fes/stade.jpg',),
   MarkerData(
-      point: LatLng(30.427214, -9.540424),
-      name: 'Grand Stade d’Agadir', city: 'Agadir',
+    point: LatLng(30.427214, -9.540424),
+    name: 'Grand Stade d’Agadir', city: 'Agadir',
     description: "Le Grand Stade d’Agadir, également appelé Stade Adrar, est l’un des "
         "plus grands et plus modernes stades du Maroc. Inauguré en 2013, il "
         "a accueilli plusieurs événements internationaux dont la Coupe du Monde "
@@ -106,8 +107,8 @@ final List<MarkerData> stadiumData = [
         "la région du Souss en font un édifice emblématique.",
     imageUrl: 'assets/images/agadir/stade.jpg',),
   MarkerData(
-      point: LatLng(35.741211, -5.858105),
-      name: 'Grand Stade de Tanger', city: 'Tanger',
+    point: LatLng(35.741211, -5.858105),
+    name: 'Grand Stade de Tanger', city: 'Tanger',
     description: "Le Grand Stade de Tanger, également appelé Stade Ibn Battouta, est "
         "l’un des stades les plus modernes du Maroc. Construit en 2011, il a "
         "bénéficié d’importantes rénovations récentes en 2023–2025 afin de "
@@ -119,58 +120,57 @@ final List<MarkerData> stadiumData = [
     imageUrl: 'assets/images/tangier/stade.jpg',),
 ];
 
-// Define the Fan Zone Marker Data (Extended with Description/Image)
 final List<MarkerData> fanZoneData = [
+  // ... (Liste fanZoneData inchangée) ...
   MarkerData(
     point: LatLng(33.60609, -7.65345),
     name: 'Espace Torro',
     city: 'Casablanca',
-    description: "L'Espace Toro est un lieu événementiel majeur et une grande place dans le quartier d'Aïn Diab à Casablanca. Il est principalement utilisé pour accueillir de vastes manifestations, festivals (comme WeCasablanca) et salons commerciaux (comme le salon de l'automobile d'occasion), grâce à sa capacité à gérer un large public. Cet endroit central est incontournable pour les grands rassemblements en plein air de la métropole.",
+    description: "Lieu événementiel majeur et une grande place dans le quartier d'Aïn Diab à Casablanca. Il est principalement utilisé pour accueillir de vastes manifestations, festivals (comme WeCasablanca) et salons commerciaux (comme le salon de l'automobile d'occasion), grâce à sa capacité à gérer un large public. Cet endroit central est incontournable pour les grands rassemblements en plein air de la métropole.",
     imageUrl: 'assets/images/casablanca/fanzone1.jpg',
   ),
   MarkerData(
     point: LatLng(33.56344, -7.65718),
     name: 'Anfa Park',
     city: 'Casablanca',
-    description: "A spacious urban park dedicated to fan activities.",
+    description: "Immense parc urbain moderne et paysager, situé sur l'ancien site de l'aéroport d'Anfa, offrant un vaste espace de loisirs, de détente et de rassemblement, souvent utilisé pour des événements majeurs.",
     imageUrl: 'assets/images/casablanca/fanzone2.jpg',
   ),
-  // NOTE: You should add description/image details for all other fan zones here.
   MarkerData(
-      point: LatLng(33.99242, -6.83601),
-      name: 'Esplanade OLM Souissi',
-      city: 'Rabat',
-    description: 'A historic stadium often used for local league matches.',
+    point: LatLng(33.99242, -6.83601),
+    name: 'Esplanade OLM Souissi',
+    city: 'Rabat',
+    description: "Vaste terrain en plein air situé dans le quartier de Souissi, mondialement célèbre pour être le site principal qui accueille chaque année le festival de musique international Mawazine, en faisant l'une des plus grandes scènes de concerts au Maroc.",
     imageUrl: 'assets/images/rabat/fanzone1.jpg',),
   MarkerData(
-      point: LatLng(33.92653, -6.91365),
-      name: 'Place de Kasbah de Temara',
-      city: 'Rabat',
-    description: 'A historic stadium often used for local league matches.',
+    point: LatLng(33.92653, -6.91365),
+    name: 'Place de Kasbah de Temara',
+    city: 'Rabat',
+    description: "Lieu historique et un point de rassemblement central de la ville, souvent utilisé pour des événements communautaires, culturels et, plus récemment, comme l'une des Fan Zones officielles pour les grands événements sportifs comme la CAN 2025.",
     imageUrl: 'assets/images/rabat/kasbah_oudayas.jpg',),
   MarkerData(
-      point: LatLng(35.78309, -5.76524),
-      name: 'Villa Harris Park',
-      city: 'Tanger',
-    description: 'A historic stadium often used for local league matches.',
+    point: LatLng(35.78309, -5.76524),
+    name: 'Villa Harris Park',
+    city: 'Tanger',
+    description: "Magnifique parc public et une ancienne résidence historique, offrant une oasis de verdure sur le boulevard Mohamed VI, et un lieu prisé pour la détente, l'histoire et les événements, servant notamment de Fan Zone pour des compétitions sportives.",
     imageUrl: 'assets/images/tangier/fanzone.jpg',),
   MarkerData(
-      point: LatLng(34.04954, -5.02695),
-      name: 'Jardin Botanique',
-      city: 'Fes',
-    description: 'A historic stadium often used for local league matches.',
+    point: LatLng(34.04954, -5.02695),
+    name: 'Jardin Botanique',
+    city: 'Fes',
+    description: "L'un des plus anciens et des plus beaux jardins publics de Fès, créé au XIXe siècle, reconnu pour ses étangs, ses espaces luxuriants et sa collection de plus de 3 000 espèces de plantes.",
     imageUrl: 'assets/images/fes/fanzone.jpg',),
   MarkerData(
-      point: LatLng(31.63447, -8.00041),
-      name: 'Place Bab Doukkala',
-      city: 'Marrakech',
-    description: 'A historic stadium often used for local league matches.',
+    point: LatLng(31.63447, -8.00041),
+    name: 'Place Bab Doukkala',
+    city: 'Marrakech',
+    description: "Place historique et un carrefour très fréquenté à Marrakech, située à l'une des portes principales de la Médina, servant de nœud de transport et de lieu de vie communautaire, ainsi que de lieu de rassemblement pour des événements (elle a été désignée comme une Fan Zone pour la CAN 2025).",
     imageUrl: 'assets/images/marrakech/fanzone.jpg',),
   MarkerData(
-      point: LatLng(30.42314, -9.61437),
-      name: 'Place Agadir ( La Marina )',
-      city: 'Agadir',
-    description: 'A historic stadium often used for local league matches.',
+    point: LatLng(30.42314, -9.61437),
+    name: 'Place Agadir ( La Marina )',
+    city: 'Agadir',
+    description: "Un complexe touristique, résidentiel et de plaisance de luxe, situé au pied de la Kasbah, offrant un port de plaisance, des boutiques, des restaurants, des cafés et des appartements, constituant un lieu de vie et de loisirs incontournable de la ville.",
     imageUrl: 'assets/images/agadir/marina.jpg',),
 ];
 
@@ -193,6 +193,12 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
   bool _showFanZones = true;
   bool _isPanelOpen = false;
 
+  // State variable for route polyline
+  List<LatLng> _routePoints = [];
+
+  // OpenRouteService API Key (Using the provided key)
+  final String _openRouteServiceApiKey = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjIxM2JjYjgzNGFkNjQ0ZGJhMzExNWUwOTMyYmE0ODc2IiwiaCI6Im11cm11cjY0In0=';
+
   @override
   void initState() {
     super.initState();
@@ -202,7 +208,6 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
 
   // --- Location Logic (Unchanged) ---
   Future<void> _fetchCurrentLocationMarkerOnly() async {
-    // ... (Your existing location logic)
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -223,6 +228,11 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
   }
 
   void _goToMyLocation() async {
+    // Clear route when moving to my location
+    setState(() {
+      _routePoints = [];
+    });
+
     await _fetchCurrentLocationMarkerOnly();
     if (_currentLocation == null) return;
 
@@ -234,14 +244,113 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
     );
   }
 
-  // --- NEW: Bottom Sheet Logic for Marker Details ---
+  // --- CORRECTION: Fonction pour animer la carte pour s'adapter à une liste de points LatLng ---
+  void _moveMapToBounds(List<LatLng> points) {
+    if (points.isEmpty) return;
+
+    double minLat = points.first.latitude;
+    double maxLat = points.first.latitude;
+    double minLng = points.first.longitude;
+    double maxLng = points.first.longitude;
+
+    for (final p in points) {
+      minLat = min(minLat, p.latitude);
+      maxLat = max(maxLat, p.latitude);
+      minLng = min(minLng, p.longitude);
+      maxLng = max(maxLng, p.longitude);
+    }
+
+    final center = LatLng(
+      (minLat + maxLat) / 2,
+      (minLng + maxLng) / 2,
+    );
+
+    final latDiff = (maxLat - minLat).abs();
+    final lngDiff = (maxLng - minLng).abs();
+    final maxDiff = max(latDiff, lngDiff);
+
+    // Simple zoom heuristic for world map
+    double zoom = 15;
+    if (maxDiff > 5) zoom = 5;
+    else if (maxDiff > 2) zoom = 6;
+    else if (maxDiff > 1) zoom = 7;
+    else if (maxDiff > 0.5) zoom = 9;
+    else if (maxDiff > 0.25) zoom = 11;
+    else if (maxDiff > 0.1) zoom = 13;
+
+    _animatedMapController.animateTo(
+      dest: center,
+      zoom: zoom,
+      curve: Curves.easeInOut,
+      duration: const Duration(seconds: 1),
+    );
+  }
+
+  // --- Fonction générique pour calculer l'itinéraire ---
+  Future<void> _calculateAndDrawRoute(LatLng destinationPoint) async {
+    if (_currentLocation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Veuillez activer votre géolocalisation pour calculer l\'itinéraire.')),
+      );
+      return;
+    }
+
+    // Clear previous route
+    setState(() {
+      _routePoints = [];
+    });
+
+    final startLng = _currentLocation!.longitude;
+    final startLat = _currentLocation!.latitude;
+    final endLng = destinationPoint.longitude;
+    final endLat = destinationPoint.latitude;
+
+    final url = Uri.parse(
+        'https://api.openrouteservice.org/v2/directions/driving-car'
+            '?api_key=$_openRouteServiceApiKey'
+            '&start=$startLng,$startLat'
+            '&end=$endLng,$endLat');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final coordinates = data['features'][0]['geometry']['coordinates'] as List;
+
+        // Convert ORS [longitude, latitude] pairs to Flutter Map LatLng
+        final List<LatLng> points = coordinates.map((coord) {
+          return LatLng(coord[1] as double, coord[0] as double);
+        }).toList();
+
+        setState(() {
+          _routePoints = points;
+        });
+
+        // Use the corrected helper function to move the map
+        _moveMapToBounds(_routePoints);
+
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur API (${response.statusCode}): Impossible de calculer l\'itinéraire. (Code: ${response.statusCode})')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Une erreur s\'est produite lors du calcul de l\'itinéraire: $e')),
+      );
+    }
+  }
+
+
+  // --- Bottom Sheet Logic for Marker Details (Unchanged) ---
   void _showMarkerDetails(MarkerData data) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Allows content to take up more space
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.5, // Start height (50% of screen)
+          initialChildSize: 0.5,
           minChildSize: 0.3,
           maxChildSize: 0.9,
           expand: false,
@@ -249,7 +358,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
             return Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
                 ),
@@ -263,12 +372,12 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
                     Stack(
                       alignment: Alignment.topCenter,
                       children: [
-                        // Image (with fallback error handling)
-                        Container(
+                        // Image
+                        SizedBox(
                           height: 200,
                           width: double.infinity,
                           child: ClipRRect(
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(20),
                               topRight: Radius.circular(20),
                             ),
@@ -276,7 +385,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
                               data.imageUrl,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
-                                return Center(
+                                return const Center(
                                   child: Icon(
                                     Icons.error_outline,
                                     size: 50,
@@ -311,7 +420,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
                           // Name
                           Text(
                             data.name,
-                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 4),
                           // Location (City)
@@ -321,7 +430,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
                               const SizedBox(width: 4),
                               Text(
                                 data.city,
-                                style: TextStyle(fontSize: 18, color: Colors.grey),
+                                style: const TextStyle(fontSize: 18, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -329,23 +438,45 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
                           // Description
                           Text(
                             data.description,
-                            style: TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 16),
                           ),
                           const SizedBox(height: 32),
 
-                          // 3. Destination Button
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton.icon(
-                              onPressed: () => _launchDestination(data.point),
-                              icon: const Icon(Icons.navigation),
-                              label: const Text("Get Directions"),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                          // 3. Action Buttons
+                          Row(
+                            children: [
+                              // Button to close the bottom sheet
+                              Expanded(
+                                child: ElevatedButton.icon(
+                                  onPressed: () => Navigator.pop(context), // <--- CLOSE ACTION
+                                  icon: const Icon(Icons.close),
+                                  label: const Text('Fermer'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.grey[300],
+                                    foregroundColor: Colors.black,
+                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                  ),
+                                ),
                               ),
-                            ),
+                              const SizedBox(width: 8),
+
+                              // Button to calculate and draw route
+                              Expanded(
+                                child: ElevatedButton.icon(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Close the sheet
+                                    _calculateAndDrawRoute(data.point); // Calculate route
+                                  },
+                                  icon: const Icon(Icons.directions),
+                                  label: const Text('Itinéraire'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -360,24 +491,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
     );
   }
 
-  // --- NEW: Function to open Google Maps ---
-  void _launchDestination(LatLng point) async {
-    // Standard URL for launching directions on Google Maps
-    final url =
-        'https://www.google.com/maps/dir/?api=1&destination=${point.latitude},${point.longitude}';
-
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not launch directions.')),
-      );
-    }
-  }
-
-
-  // --- Marker Building and Filtering Logic (Modified) ---
+  // --- Marker Building and Filtering Logic (Unchanged) ---
 
   // Helper function to create a Marker widget from MarkerData
   Marker _buildMarker(MarkerData data, {required bool isStadium}) {
@@ -392,7 +506,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
       width: 40,
       height: 40,
       child: GestureDetector(
-        onTap: () => _showMarkerDetails(data), // <-- NEW: Tap handler
+        onTap: () => _showMarkerDetails(data), // <-- Tap handler
         child: Container(
           decoration: BoxDecoration(
             color: color,
@@ -404,7 +518,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
     );
   }
 
-  // Combines and filters all marker lists (Unchanged, but calls new _buildMarker)
+  // Combines and filters all marker lists (Unchanged)
   List<Marker> _getFilteredMarkers() {
     final List<Marker> filtered = [];
     final query = _searchQuery.toLowerCase();
@@ -467,12 +581,11 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
   // --- Widget for the Control Panel (Hub) (Unchanged) ---
   Widget _buildControlPanel() {
     return AnimatedPositioned(
-      // ... (Rest of the _buildControlPanel implementation is the same)
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
       top: 0,
       bottom: 0,
-      left: _isPanelOpen ? 0 : -300,
+      left: _isPanelOpen ? 0 : -280, // Ajusté pour 280
       child: Container(
         width: 280,
         color: Colors.white,
@@ -511,12 +624,12 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Text(
-                'Filter Markers',
+                'Filtrer Marqueux',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
             ListTile(
-              title: const Text('Stadiums (Red)'),
+              title: const Text('Stades (Rouge)'),
               trailing: Switch(
                 value: _showStadiums,
                 onChanged: (bool value) {
@@ -528,7 +641,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
               ),
             ),
             ListTile(
-              title: const Text('Fan Zones (Green)'),
+              title: const Text('Fan Zones (Vert)'),
               trailing: Switch(
                 value: _showFanZones,
                 onChanged: (bool value) {
@@ -563,6 +676,20 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
                 urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 userAgentPackageName: 'com.example.canvisit',
               ),
+
+              // Polyline Layer to draw the route
+              PolylineLayer(
+                polylines: [
+                  if (_routePoints.isNotEmpty)
+                    Polyline(
+                      points: _routePoints,
+                      color: Colors.blue,
+                      strokeWidth: 5.0,
+                    ),
+                ],
+              ),
+
+              // Marker Layer
               MarkerLayer(
                 markers: _getFilteredMarkers(),
               ),
