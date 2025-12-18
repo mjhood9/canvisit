@@ -44,6 +44,23 @@ class _TeamChatPageState extends State<TeamChatPage> {
   final String cloudName = "dib0ymnnu";
   final String uploadPreset = "canvisit";
 
+  @override
+  void initState() {
+    super.initState();
+    // 1. Reset count when entering the page
+    _resetUnreadCount();
+  }
+
+  // 🛡️ Logic to reset unread count for the current user
+  void _resetUnreadCount() {
+    final String? myUid = _auth.currentUser?.uid;
+    if (myUid == null) return;
+
+    _firestore.collection('group_chats').doc(widget.groupId).update({
+      'unreadCount.$myUid': 0,
+    }).catchError((e) => debugPrint("Error resetting count: $e"));
+  }
+
   Future<GroupData> _fetchGroupData() async {
     final doc = await _firestore.collection('group_chats').doc(widget.groupId).get();
     if (doc.exists) {

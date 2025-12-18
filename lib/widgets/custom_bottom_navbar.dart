@@ -6,6 +6,8 @@ import '../screens/explore_page.dart';
 import '../screens/map_page.dart';
 import '../screens/profile_page.dart';
 import '../services/auth_service.dart';
+import '../services/notification_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class MainWrapper extends StatefulWidget {
   const MainWrapper({super.key});
@@ -20,6 +22,33 @@ class MainWrapper extends StatefulWidget {
 
 class _MainWrapperState extends State<MainWrapper> {
   int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // 🚀 Update the token as soon as the authenticated UI loads
+    NotificationService.updateFcmToken();
+
+    // 🔔 (Optional) Listen for notification taps while the app is running
+    _setupInteractedMessage();
+  }
+
+  Future<void> _setupInteractedMessage() async {
+    // This handles opening the app from a terminated state via notification
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      _handleMessageNavigation(initialMessage);
+    }
+
+    // This handles tapping a notification while the app is in the background
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageNavigation);
+  }
+
+  void _handleMessageNavigation(RemoteMessage message) {
+    if (message.data['groupId'] != null) {
+      // Use your Navigator to go to TeamChatPage
+    }
+  }
 
   void setTab(int index) {
     setState(() => currentIndex = index);

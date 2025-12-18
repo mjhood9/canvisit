@@ -32,7 +32,7 @@ class _ChatBotPageState extends State<ChatBotPage> with TickerProviderStateMixin
     super.initState();
     model = GenerativeModel(
       model: 'gemini-2.5-flash',
-      apiKey: 'YOUR_API_KEY',
+      apiKey: 'AIzaSyD5J0c2WVrob4mdvebYbyWwv31LqSlxZOk',
     );
     chat = model.startChat();
   }

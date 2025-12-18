@@ -5,6 +5,7 @@
 // import 'package:canvisit/seeders/tangier_seeder.dart';
 // import './seeders/casablanca_seeder.dart';
 import 'package:canvisit/seeders/groupchat_seeder.dart';
+import 'package:canvisit/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await NotificationService.initialize();
   // await seedCan2025GroupChats();
   // await seedCasablancaAttractions();
   // await seedRabatAttractions();

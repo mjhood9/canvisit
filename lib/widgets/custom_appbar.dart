@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../screens/chatbot_page.dart';
-import '../screens/notification_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
@@ -39,20 +38,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         },
         tooltip: 'Chatbot',
       ),
-
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.notifications_none, color: Colors.white),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const NotificationPage()),
-            );
-          },
-          tooltip: 'Notifications',
-        ),
-      ],
-
       // ✔ Added TabBar with selected/unselected colors + white top border
       bottom: tabController != null
           ? PreferredSize(
